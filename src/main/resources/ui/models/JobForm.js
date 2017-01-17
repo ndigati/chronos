@@ -307,12 +307,16 @@ export default class JobForm {
 
   syncNonzeroRealField(event, field) {
     let value = event.target.value
+    let name = event.target.name
     if (isNaN(value)) {
       field.valid = false
       field.error = field.label + ' must contain real number'
     } else if (value && value <= 0) {
       field.valid = false
       field.error = field.label + ' must be >=0'
+    } else if (name === 'disk' && value < 0) {
+      field.valid = false
+      field.error = field.label + ' must be non-negative'
     } else {
       field.valid = true
       field.error = ''
@@ -323,7 +327,7 @@ export default class JobForm {
   syncContainerName(event, field) {
     let value = event.target.value
     if (value) {
-      if (!value.match(/^[a-z0-9\/:]+$/)) {
+      if (!value.match(/^[a-z0-9\/:\.]+$/)) {
         field.valid = false
         field.error = field.label + ' must match regex /^[a-z0-9\/:]+$/'
       } else {
